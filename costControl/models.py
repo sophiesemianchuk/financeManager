@@ -2,7 +2,7 @@ from django.db import models
 import datetime
 
 SELECT_OPERATION = (
-    ('expenses', 'Витрата'), ('profits', 'Дохід'))
+    ('Expenses',''), ('Profits',''))
 
 
 class Category(models.Model):

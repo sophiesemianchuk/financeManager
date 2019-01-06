@@ -37,7 +37,7 @@
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"> Transaction
                             <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a class="nav-link" href="#">Create transaction</a></li>
+                                <li><a class="nav-link" href="{%url 'create_transaction' %}">Create transaction</a></li>
                                 <li><a class="nav-link" href="#">All transactions</a></li>
                             </ul>
                     </li>
@@ -65,6 +65,7 @@
     {% block home %}{% endblock %}
     {% block create_category %}{% endblock %}
     {% block all_categories %}{% endblock %}
+    {% block create_transaction %}{% endblock %}
     <footer class="page-footer container-fluid bg-4 text-center">
             <h6>Сем'янчук Софія</h6>
             <h6>2018 © Усі права захищено.</h6>

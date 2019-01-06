@@ -76,6 +76,39 @@ def all_categories(request):
     return render(request, 'all_categories.html', context)
 
 
+@login_required
+def create_transaction(request):
+    if request.method == 'POST':
+        form = TransactionForm(request.POST)
+        if form.is_valid():
+            transaction = form.save(commit=False)
+            transaction.user = request.user
+            transaction.save()
+            return redirect('home')
+        else:
+            categories_list=Category.objects.filter(user=request.user)
+            transaction = Transaction()
+            transaction.category = request.POST.get('category')
+            transaction.operation = request.POST.get('operation')
+            transaction.sum = request.POST.get('sum')
+            transaction.date_operation = request.POST.get('date_operation')
+            transaction.description = request.POST.get('description')
+            context = {
+                'form': form,
+                'transaction': transaction,
+                'categories_list': categories_list,
+                'SELECT_OPERATION': SELECT_OPERATION,
+            }
+            return render(request, 'create_transaction.html', context)
+    else:
+        form = TransactionForm()
+        categories_list=Category.objects.filter(user=request.user)
+        context = {
+            'form': form,
+            'categories_list': categories_list,
+            'SELECT_OPERATION': SELECT_OPERATION,
+        }
+    return render(request, 'create_transaction.html', context)
 
 @login_required
 def log_out(request):

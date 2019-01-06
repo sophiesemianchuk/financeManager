@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Create transaction{% endblock %}
+{% block create_transaction %}
+<div class="container-fluid bg-2 main col-md-6">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="category">Enter a category for the transaction:</label>
+            <select class="custom-select form-control" name="category" id="category">
+                <option selected>Choose...</option>
+                {% for category in categories_list %}
+                <option value="{{category.id}}">{{category.category}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="category">Enter a type for the transaction:</label>
+            <select class="custom-select form-control" name="operation" id="operation">
+                <option selected>Choose...</option>
+                {% for type in SELECT_OPERATION %}
+                <option value="{{type.0}}">{{type.0}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="sum">Enter transaction amount :</label>
+            <input  type="text" name="sum" id="sum" class="form-control" placeholder="Enter transaction amount" required>
+        </div>
+        <div class="form-group">
+            <label for="date_operation">Enter data transaction: </label>
+            <input type="date" id="date_operation"  name="date_operation" value="" min="2018-01-01T00:00" max="2019-12-31T00:00" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Add a brief description:</label>
+            <input  type="text" name="description" id="description" maxlength="300" class="form-control" placeholder="Add a description of the transaction">
+        </div>
+        <input type="submit" class="btn btn-primary" id="createcategory-btn" value="Create">
+    </form>
+</div>
+{% endblock %}

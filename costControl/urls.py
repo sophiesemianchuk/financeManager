@@ -12,4 +12,5 @@ urlpatterns = [
         path('profile/', views.home, name='home'),
         path('create_category/', views.create_category, name='create_category'),
         path('all_categories/', views.all_categories, name='all_categories'),
+        path('create_transaction/', views.create_transaction, name='create_transaction'),
 ]
