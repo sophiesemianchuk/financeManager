@@ -21,7 +21,7 @@
                 <td>{{category.category}}</td>
                 <td>{{category.description}}</td>
                 <td>
-                    <button type="button" class="btn btn-link btn-outline-info" href="">&#9998;</button>
+                    <a class="btn btn-link btn-outline-info" href="{% url 'edit_category' pk=category.id %}">&#9998;</a>
                     <button type="button" class="btn btn-link btn-outline-info" href="">&#10006;</button>
                 </td>
             </tr>

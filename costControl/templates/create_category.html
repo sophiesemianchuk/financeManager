@@ -7,13 +7,15 @@
         {% csrf_token %}
         <div class="form-group">
             <label for="category">Enter category title :</label>
-            <input  type="text" name="category" id="category" maxlength="50" class="form-control" placeholder="Enter category" required>
+            <input  type="text" name="category" id="category" maxlength="50" class="form-control" placeholder="Enter category"
+            value="{{ category.category }}" required>
         </div>
         <div class="form-group">
             <label for="description">Add a brief description:</label>
-            <input  type="text" name="description" id="description" maxlength="300" class="form-control" placeholder="Add a description of the category">
+            <input  type="text" name="description" id="description" maxlength="300" class="form-control" placeholder="Add a description of the category" value="{{ category.description }}">
         </div>
-        <input type="submit" class="btn btn-primary" id="createcategory-btn" value="Create">
+        <input type="submit" class="btn btn-primary" id="createcategory-btn" value="Save">
+        <input type="submit" class="btn btn-primary" id="createcategory-btn" value="Reset">
     </form>
 </div>
 {% endblock %}

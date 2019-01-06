@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,  get_object_or_404
 from django.views.generic import ListView
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
@@ -74,6 +74,36 @@ def all_categories(request):
         'categories_list': categories_list,
     }
     return render(request, 'all_categories.html', context)
+
+
+def get_user_object_or_404(model_class, request, pk):
+    queryset = model_class.objects.filter(user=request.user)
+    return get_object_or_404(queryset, pk=pk)
+
+
+@login_required
+def edit_category(request, pk):
+    category = get_user_object_or_404(Category, request, pk)
+
+    if request.method == 'POST':
+        form = CategoryForm(request.POST, instance=category)
+        if form.is_valid():
+            category = form.save(commit=False)
+            category.save()
+            return redirect('home')
+        else:
+            category.category = request.POST.get('category')
+            category.description = request.POST.get('description')
+            context = {
+                'form': form,
+                'category': category,
+            }
+            return render(request, 'create_category.html', context)
+    else:
+        context = {
+            'category': category,
+        }
+        return render(request, 'create_category.html', context)
 
 
 @login_required
