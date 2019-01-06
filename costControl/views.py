@@ -67,6 +67,17 @@ def create_category(request):
 
 
 @login_required
+def all_categories(request):
+    user = request.user
+    categories_list = Category.objects.filter(user=user)
+    context = {
+        'categories_list': categories_list,
+    }
+    return render(request, 'all_categories.html', context)
+
+
+
+@login_required
 def log_out(request):
     logout(request)
     return render(request, 'log_out.html')

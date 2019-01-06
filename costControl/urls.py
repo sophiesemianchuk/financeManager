@@ -11,4 +11,5 @@ urlpatterns = [
         path('register/', views.register, name='register'),
         path('profile/', views.home, name='home'),
         path('create_category/', views.create_category, name='create_category'),
+        path('all_categories/', views.all_categories, name='all_categories'),
 ]

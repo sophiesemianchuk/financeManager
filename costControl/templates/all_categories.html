@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}All categories{% endblock %}
+{% block all_categories %}
+<div class="container-fluid bg-1 main col-md-10">
+    <h2>Table with categories:</h2>
+    {% if categories_list  %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">№</th>
+                <th scope="col">Category</th>
+                <th scope="col">Description</th>
+                <th scope="col">Management</th>
+            </tr>
+        </thead>
+        <tbody>
+            {%for category in categories_list %}
+            <tr>
+                <th scope="row">{{category.id}}</th>
+                <td>{{category.category}}</td>
+                <td>{{category.description}}</td>
+                <td>
+                    <button type="button" class="btn btn-link btn-outline-info" href="">&#9998;</button>
+                    <button type="button" class="btn btn-link btn-outline-info" href="">&#10006;</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>You have not created any categories yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

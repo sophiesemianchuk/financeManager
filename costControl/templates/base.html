@@ -30,7 +30,7 @@
                             <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a class="nav-link" href="{%url 'create_category' %}">Create category</a></li>
-                                <li><a class="nav-link" href="">All categories</a></li>
+                                <li><a class="nav-link" href="{%url 'all_categories' %}">All categories</a></li>
                             </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -45,7 +45,7 @@
                 </ul>
 
                 <ul class="navbar-nav ml-auto">
-                     <li class="nav-item"><a class="nav-link" href="#"><span class="glyphicon glyphicon-user">&#9998;</span>{{user.username}}</a></li>
+                     <li class="nav-item"><a class="nav-link" href="#"> {{user.username}} </a></li>
                      <li class="nav-item"><a class="nav-link" href="{%url 'logout' %}"><span class="">&#10162;</span> Log out </a></li>
                  </ul>
                 {% else %}
@@ -64,6 +64,7 @@
     {% block logout %}{% endblock %}
     {% block home %}{% endblock %}
     {% block create_category %}{% endblock %}
+    {% block all_categories %}{% endblock %}
     <footer class="page-footer container-fluid bg-4 text-center">
             <h6>Сем'янчук Софія</h6>
             <h6>2018 © Усі права захищено.</h6>
