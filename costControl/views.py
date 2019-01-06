@@ -110,6 +110,26 @@ def create_transaction(request):
         }
     return render(request, 'create_transaction.html', context)
 
+
+@login_required
+def all_transactions(request):
+    user = request.user
+    categories_list = Category.objects.filter(user=user)
+    category_transaction = request.GET.get('category')
+
+    if category_transaction:
+        transactions_list = Transaction.objects.filter(user=user).filter(category=category_transaction).select_related('category')
+    else:
+        transactions_list = Transaction.objects.filter(user=user)
+    context = {
+        'transactions_list': transactions_list,
+        'categories_list': categories_list,
+        'category_transaction': category_transaction,
+        'SELECT_OPERATION': SELECT_OPERATION,
+    }
+    return render(request, 'all_transactions.html', context)
+
+
 @login_required
 def log_out(request):
     logout(request)
