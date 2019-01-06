@@ -22,14 +22,14 @@
                 <td>{{category.description}}</td>
                 <td>
                     <a class="btn btn-link btn-outline-info" href="{% url 'edit_category' pk=category.id %}">&#9998;</a>
-                    <button type="button" class="btn btn-link btn-outline-info" href="">&#10006;</button>
+                    <a class="btn btn-link btn-outline-info" href="{% url 'delete_category' pk=category.id %}">&#10006;</a>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
     {% else %}
-    <p>You have not created any categories yet.</p>
+    <p>You have not created any category yet.</p>
     {% endif %}
 </div>
 {% endblock %}

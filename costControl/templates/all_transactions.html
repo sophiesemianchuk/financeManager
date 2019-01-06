@@ -2,57 +2,57 @@
 {% load static %}
 {% block title %}All categories{% endblock %}
 {% block all_transactions %}
-<div class="container-fluid bg-1 main col-md-10">
-    <h2>Table with transactions:</h2>
-    <div class="form-group">
-        <label  for="inputSelectCategory">Enter a category for the transaction:</label>
-        <select class="custom-select" id="inputSelectCategory" name="categories_list">
-            <option></option>
-            {% for category in categories_list %}
-                <option value="{{ category.id }}" {% if  category.id == category_transaction %} selected {% endif %}>{{category.category}}</option>
-            {% endfor %}
-            <option value="" href="{%url 'all_transactions' %}">All</option>
-        </select>
+    <div class="container-fluid bg-1 main col-md-10">
+        <h2>Table with transactions:</h2>
+        <div class="form-group">
+            <label  for="inputSelectCategory">Enter a category for the transaction:</label>
+            <select class="custom-select" id="inputSelectCategory" name="categories_list">
+                <option></option>
+                {% for category in categories_list %}
+                    <option value="{{ category.id }}" {% if  category.id == category_transaction %} selected {% endif %}>{{category.category}}</option>
+                {% endfor %}
+                <option value="" href="{%url 'all_transactions' %}">All</option>
+            </select>
+        </div>
+        {% if transactions_list  %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">№</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Transaction amount</th>
+                    <th scope="col">Data</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Management</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for transaction in transactions_list %}
+                <tr>
+                    <th scope="row">{{transaction.id}}</th>
+                    <td>{{transaction.category.category}}</td>
+                    <td>{{transaction.operation}}</td>
+                    <td>{{transaction.sum}}</td>
+                    <td>{{transaction.date_operation}}</td>
+                    <td>{{transaction.description}}</td>
+                    <td>
+                        <a class="btn btn-link btn-outline-info" href="{% url 'edit_transaction' pk=transaction.id %}">&#9998;</a>
+                        <a class="btn btn-link btn-outline-info" href="{% url 'delete_transaction' pk=transaction.id %}">&#10006;</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>You have not created any transaction yet.</p>
+        {% endif %}
     </div>
-    {% if transactions_list  %}
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th scope="col">№</th>
-                <th scope="col">Category</th>
-                <th scope="col">Type</th>
-                <th scope="col">Transaction amount</th>
-                <th scope="col">Data</th>
-                <th scope="col">Description</th>
-                <th scope="col">Management</th>
-            </tr>
-        </thead>
-        <tbody>
-            {%for transaction in transactions_list %}
-            <tr>
-                <th scope="row">{{transaction.id}}</th>
-                <td>{{transaction.category.category}}</td>
-                <td>{{transaction.operation}}</td>
-                <td>{{transaction.sum}}</td>
-                <td>{{transaction.date_operation}}</td>
-                <td>{{transaction.description}}</td>
-                <td>
-                    <button type="button" class="btn btn-link btn-outline-info" href="">&#9998;</button>
-                    <button type="button" class="btn btn-link btn-outline-info" href="">&#10006;</button>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-    <p>You have not created any categories yet.</p>
-    {% endif %}
-</div>
-<script>
-        $(document).ready(function () {
-            $('select[name="categories_list"]').change(function () {
-                window.location.href = window.location.pathname + '?category=' + $(this).val();
+    <script>
+            $(document).ready(function () {
+                $('select[name="categories_list"]').change(function () {
+                    window.location.href = window.location.pathname + '?category=' + $(this).val();
+                });
             });
-        });
-</script>
+    </script>
 {% endblock %}

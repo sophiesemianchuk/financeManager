@@ -103,7 +103,18 @@ def edit_category(request, pk):
         context = {
             'category': category,
         }
-        return render(request, 'create_category.html', context)
+    return render(request, 'create_category.html', context)
+
+
+@login_required
+def delete_category(request, pk):
+    category = get_user_object_or_404(Category, request, pk)
+    try:
+        category.delete()
+        messages.success(request, f'You can not delete this category.')
+    except ProtectedError:
+        messages.error(request, f'You can not delete this category.')
+    return redirect('home')
 
 
 @login_required
@@ -138,7 +149,7 @@ def create_transaction(request):
             'categories_list': categories_list,
             'SELECT_OPERATION': SELECT_OPERATION,
         }
-    return render(request, 'create_transaction.html', context)
+        return render(request, 'create_transaction.html', context)
 
 
 @login_required
@@ -158,6 +169,51 @@ def all_transactions(request):
         'SELECT_OPERATION': SELECT_OPERATION,
     }
     return render(request, 'all_transactions.html', context)
+
+
+@login_required
+def edit_transaction(request, pk):
+    transaction = get_user_object_or_404(Transaction, request, pk)
+
+    if request.method == 'POST':
+        form = TransactionForm(request.POST, instance=transaction)
+        if form.is_valid():
+            transaction = form.save(commit=False)
+            transaction.save()
+            return redirect('home')
+        else:
+            categories_list=Category.objects.filter(user=request.user)
+
+            transaction.category = request.POST.get('category')
+            transaction.operation = request.POST.get('operation')
+            transaction.sum = request.POST.get('sum')
+            transaction.date_operation = request.POST.get('date_operation')
+            transaction.description = request.POST.get('description')
+            context = {
+                'form': form,
+                'transaction': transaction,
+                'categories_list': categories_list,
+                'SELECT_OPERATION': SELECT_OPERATION,
+            }
+            return render(request, 'create_transaction.html', context)
+    else:
+        categories_list=Category.objects.filter(user=request.user)
+        context = {
+            'categories_list': categories_list,
+            'SELECT_OPERATION': SELECT_OPERATION,
+        }
+        return render(request, 'create_transaction.html', context)
+
+
+@login_required
+def delete_transaction(request, pk):
+    transaction = get_user_object_or_404(Transaction, request, pk)
+    try:
+        transaction.delete()
+        messages.success(request, f'You delete this category.')
+    except ProtectedError:
+        messages.error(request, f'You can not delete this category.')
+    return redirect('home')
 
 
 @login_required
