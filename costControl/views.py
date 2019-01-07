@@ -5,13 +5,13 @@ from django.contrib.auth import login, authenticate, logout
 from django.template.context_processors import csrf
 from django.contrib.auth.decorators import login_required
 from django.db.models.deletion import ProtectedError
-from django.db.models import Count
+from django.db.models import Count, Sum
 from .models import Category, Transaction, SELECT_OPERATION
 from .forms import CategoryForm, TransactionForm, SignUpForm
 
 
 def index(request):
-    return render(request, 'base.html')
+    return render(request, 'index.html')
 
 
 def register(request):
@@ -149,7 +149,7 @@ def create_transaction(request):
             'categories_list': categories_list,
             'SELECT_OPERATION': SELECT_OPERATION,
         }
-        return render(request, 'create_transaction.html', context)
+    return render(request, 'create_transaction.html', context)
 
 
 @login_required
@@ -159,7 +159,7 @@ def all_transactions(request):
     category_transaction = request.GET.get('category')
 
     if category_transaction:
-        transactions_list = Transaction.objects.filter(user=user).filter(category=category_transaction).select_related('category')
+        transactions_list = Transaction.objects.filter(user=user).filter(category=category_transaction)
     else:
         transactions_list = Transaction.objects.filter(user=user)
     context = {
@@ -183,7 +183,6 @@ def edit_transaction(request, pk):
             return redirect('home')
         else:
             categories_list=Category.objects.filter(user=request.user)
-
             transaction.category = request.POST.get('category')
             transaction.operation = request.POST.get('operation')
             transaction.sum = request.POST.get('sum')
@@ -199,6 +198,7 @@ def edit_transaction(request, pk):
     else:
         categories_list=Category.objects.filter(user=request.user)
         context = {
+            'transaction': transaction,
             'categories_list': categories_list,
             'SELECT_OPERATION': SELECT_OPERATION,
         }
@@ -214,6 +214,33 @@ def delete_transaction(request, pk):
     except ProtectedError:
         messages.error(request, f'You can not delete this category.')
     return redirect('home')
+
+
+@login_required
+def group_category(request):
+    operation = request.POST.get('operation')
+    start_date = request.POST.get('start_date')
+    end_date = request.POST.get('end_date')
+    categories_list = Transaction.objects.filter(user=request.user).filter(operation=operation).filter(date_operation__range=[start_date, end_date]).values('category__category').annotate(category_total=Sum('sum'))
+    context = {
+        'categories_list': categories_list,
+    }
+    return render(request, 'group_category.html', context)
+
+
+@login_required
+def report_generator(request):
+    if request.method == 'POST':
+        type_report = request.POST.get('type_report')
+        if type_report == 'group_category':
+            return group_category(request)
+        else:
+            return day_by_day(request)
+    else:
+        context = {
+            'SELECT_OPERATION': SELECT_OPERATION,
+        }
+        return render(request, 'report_generator.html', context)
 
 
 @login_required

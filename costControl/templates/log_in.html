@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
-    {% block title %}Log in{% endblock %}
-    {% block login %}
+{% block title %}Log in{% endblock %}
+{% block login %}
     <div class="container-fluid bg-1 main col-md-6">
         {% if form.errors %}
             <p style="color: red">Your username and password didn't match. Please try again.</p>

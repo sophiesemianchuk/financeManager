@@ -1,5 +1,5 @@
-<!DOCTYPE html>
 {% load static %}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -12,6 +12,10 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
 </head>
 <body>
     <header>
@@ -41,7 +45,7 @@
                                 <li><a class="nav-link" href="{%url 'all_transactions' %}">All transactions</a></li>
                             </ul>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="#">Help</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{%url 'report_generator' %}">Report Generator</a></li>
                 </ul>
 
                 <ul class="navbar-nav ml-auto">
@@ -67,6 +71,7 @@
     {% block all_categories %}{% endblock %}
     {% block create_transaction %}{% endblock %}
     {% block all_transactions %}{% endblock %}
+    {% block report_generator %}{% endblock %}
     <footer class="page-footer container-fluid bg-4 text-center">
             <h6>Сем'янчук Софія</h6>
             <h6>2018 © Усі права захищено.</h6>

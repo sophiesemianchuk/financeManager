@@ -20,4 +20,7 @@ urlpatterns = [
         path('all_transactions/', views.all_transactions, name='all_transactions'),
         path('all_transactions/<int:pk>/edit_transaction/', views.edit_transaction, name='edit_transaction'),
         path('all_transactions/<int:pk>/delete_transaction/', views.delete_transaction, name='delete_transaction'),
+
+        path('report_generator/', views.report_generator, name='report_generator'),
+        path('report_generator/group_category/', views.group_category, name='group_category'),
 ]
