@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Create category{% endblock %}
+{% block report_generator %}
+<div class="container-fluid bg-1 main col-md-6">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="start_date">Enter the start date: </label>
+            <input type="date" id="start_date"  name="start_date" value="" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="end_date">Enter the end date: </label>
+            <input type="date" id="end_date"  name="end_date" value="" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="operation">Enter a type for the transaction:</label>
+            <select class="custom-select form-control" name="operation" id="operation">
+                <option selected>Choose...</option>
+                {% for type in SELECT_OPERATION %}
+                <option value="{{type.0}}">{{type.0}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-10">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="type_report" id="type_report_1" value="day_by_day" checked>
+                  <label class="form-check-label" for="type_report_1">
+                    Line Chart
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="type_report" id="type_report_2" value="group_category">
+                  <label class="form-check-label" for="type_report_2">
+                    Category
+                  </label>
+                </div>
+            </div>
+        </div>
+        <input type="submit" class="btn btn-primary" id="generator-btn" value="Generator">
+    </form>
+</div>
+{% endblock %}

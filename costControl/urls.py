@@ -23,4 +23,5 @@ urlpatterns = [
 
         path('report_generator/', views.report_generator, name='report_generator'),
         path('report_generator/group_category/', views.group_category, name='group_category'),
+        path('report_generator/day_by_day/', views.day_by_day, name='day_by_day'),
 ]
