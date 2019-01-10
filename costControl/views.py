@@ -159,7 +159,10 @@ def all_transactions(request):
     category_transaction = request.GET.get('category')
 
     if category_transaction:
-        transactions_list = Transaction.objects.filter(user=user).filter(category=category_transaction)
+        if category_transaction == '0':
+            transactions_list = Transaction.objects.filter(user=user)
+        else:
+            transactions_list = Transaction.objects.filter(user=user).filter(category=category_transaction)
     else:
         transactions_list = Transaction.objects.filter(user=user)
     context = {
@@ -222,19 +225,38 @@ def group_category(request):
     start_date = request.POST.get('start_date')
     end_date = request.POST.get('end_date')
     categories_list = Transaction.objects.filter(user=request.user).filter(operation=operation).filter(date_operation__range=[start_date, end_date]).values('category__category').annotate(category_total=Sum('sum'))
+    total_sum = Transaction.objects.filter(user=request.user).filter(operation=operation).filter(date_operation__range=[start_date, end_date]).aggregate(Sum('sum'))
     context = {
         'categories_list': categories_list,
+        'start_date': start_date,
+        'end_date': end_date,
+        'total_sum': total_sum,
     }
     return render(request, 'group_category.html', context)
 
 
 @login_required
+def day_by_day(request):
+    operation = request.POST.get('operation')
+    start_date = request.POST.get('start_date')
+    end_date = request.POST.get('end_date')
+    transactions_list = Transaction.objects.filter(user=request.user).filter(operation=operation).filter(date_operation__range=[start_date, end_date]).order_by('date_operation')
+    categories_list = Transaction.objects.filter(user=request.user).filter(operation=operation).filter(date_operation__range=[start_date, end_date]).values('category__category')
+    context = {
+        'transactions_list': transactions_list,
+        'categories_list': categories_list,
+        'start_date': start_date,
+        'end_date': end_date,
+    }
+    return render(request, 'day_by_day.html', context)
+
+
+@login_required
 def report_generator(request):
     if request.method == 'POST':
-        type_report = request.POST.get('type_report')
-        if type_report == 'group_category':
+        if '_group_category' in request.POST:
             return group_category(request)
-        else:
+        elif '_day_by_day' in request.POST:
             return day_by_day(request)
     else:
         context = {

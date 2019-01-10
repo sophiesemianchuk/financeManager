@@ -16,6 +16,10 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
+
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
 </head>
 <body>
     <header>
@@ -72,6 +76,8 @@
     {% block create_transaction %}{% endblock %}
     {% block all_transactions %}{% endblock %}
     {% block report_generator %}{% endblock %}
+    {% block group_category %}{% endblock %}
+    {% block day_by_day %}{% endblock %}
     <footer class="page-footer container-fluid bg-4 text-center">
             <h6>Сем'янчук Софія</h6>
             <h6>2018 © Усі права захищено.</h6>

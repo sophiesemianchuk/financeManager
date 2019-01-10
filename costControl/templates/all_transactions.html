@@ -6,12 +6,11 @@
         <h2>Table with transactions:</h2>
         <div class="form-group">
             <label  for="inputSelectCategory">Enter a category for the transaction:</label>
-            <select class="custom-select" id="inputSelectCategory" name="categories_list">
-                <option></option>
+            <select class="custom-select" id="categories_list" name="categories_list" onchange="if(this.options.selectedIndex>=0) window.location.href = window.location.pathname +'?category='+this.options [this.options.selectedIndex].value">
+                <option value="0">All</option>
                 {% for category in categories_list %}
-                    <option value="{{ category.id }}" {% if  category.id == category_transaction %} selected {% endif %}>{{category.category}}</option>
+                    <option value="{{ category.id }}">{{category.category}}</option>
                 {% endfor %}
-                <option value="" href="{%url 'all_transactions' %}">All</option>
             </select>
         </div>
         {% if transactions_list  %}
@@ -49,10 +48,9 @@
         {% endif %}
     </div>
     <script type="text/javascript">
-            $(document).ready(function () {
-                $('select[name="categories_list"]').change(function () {
-                    window.location.href = window.location.pathname + '?category=' + $(this).val();
-                });
-            });
+        $(document).ready(function(){
+            u =  window.location.search.split('=')[1];
+            $("select option[value='"+u+"']").attr('selected','selected');
+        });
     </script>
 {% endblock %}
