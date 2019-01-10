@@ -241,10 +241,8 @@ def day_by_day(request):
     start_date = request.POST.get('start_date')
     end_date = request.POST.get('end_date')
     transactions_list = Transaction.objects.filter(user=request.user).filter(operation=operation).filter(date_operation__range=[start_date, end_date]).order_by('date_operation')
-    categories_list = Transaction.objects.filter(user=request.user).filter(operation=operation).filter(date_operation__range=[start_date, end_date]).values('category__category')
     context = {
         'transactions_list': transactions_list,
-        'categories_list': categories_list,
         'start_date': start_date,
         'end_date': end_date,
     }

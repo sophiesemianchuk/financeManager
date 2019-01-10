@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Group category{% endblock %}
+{% block group_category %}
+    <div class="row">
+        <div class="container-fluid col-3" style="margin-top:2em">
+            <ul class="list-group">
+                {% for category in categories_list %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ category.category__category }}
+                    <span>{{ category.category_total }}</span>
+                </li>
+                {% endfor %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <b>ALL:</b>
+                    <span><b>{{ total_sum.sum__sum }}</b></span>
+                </li>
+            </ul>
+        </div>
+        <div class="container-fluid col-md-6" id="container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+    </div>
+    <script src="https://code.highcharts.com/highcharts.src.js"></script>
+    <script>
+        Highcharts.chart('container', {
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: 'Group categories from {{ start_date }} to {{ end_date }}'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    }
+                }
+            },
+            series: [{
+                name: 'Category',
+                colorByPoint: true,
+                data: [
+                    {% for category in categories_list %}
+                        {
+                            name: '{{ category.category__category }}',
+                            y: {{ category.category_total }}
+                        },
+                    {% endfor %}
+                ]
+            }]
+        });
+    </script>
+{% endblock %}

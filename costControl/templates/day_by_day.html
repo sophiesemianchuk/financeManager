@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Day by day{% endblock %}
+{% block day_by_day %}
+<div class="row">
+    <div class="container-fluid col-3" style="margin-top:2em">
+        <ul class="list-group">
+            {% for category in categories_list %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ category.category__category }}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="container-fluid col-md-6" id="container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+</div>
+    <script src="https://code.highcharts.com/highcharts.src.js"></script>
+    <script>
+        Highcharts.chart('container', {
+            title: {
+                text: 'Amount of expenses/revenue from {{start_date}} to {{end_date}}'
+            },
+            yAxis: {
+                title: {
+                    text: 'Expenses/Revenue'
+                }
+            },
+            xAxis: {
+                title: {
+                    text: 'Operation date'
+            },
+            type: 'datetime',
+                tickInterval: 24 * 3600 * 1000 * 7, {#    days * seconds in hour * miliseconds * week#}
+            },
+            series: [{
+                name: 'Amount by dates',
+                data: [
+                    {% for transaction in transactions_list %}
+                        [Date.parse('{{ transaction.date_operation }}'), {{ transaction.sum }}],
+                    {% endfor %}
+                ]
+            }],
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom'
+                        }
+                    }
+                }]
+            }
+        });
+    </script>
+{% endblock %}
