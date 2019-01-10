@@ -1,59 +1,68 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load tz %}
 {% block title %}Day by day{% endblock %}
 {% block day_by_day %}
 <div class="row">
     <div class="container-fluid col-3" style="margin-top:2em">
         <ul class="list-group">
-            {% for category in categories_list %}
+            {% for transaction in transactions_list %}
             <li class="list-group-item d-flex justify-content-between align-items-center">
-                {{ category.category__category }}
+                {{ transaction.date_operation }}
+                <span>{{ transaction.transaction_total }}</span>
             </li>
             {% endfor %}
         </ul>
     </div>
     <div class="container-fluid col-md-6" id="container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
 </div>
-    <script src="https://code.highcharts.com/highcharts.src.js"></script>
-    <script>
-        Highcharts.chart('container', {
-            title: {
-                text: 'Amount of expenses/revenue from {{start_date}} to {{end_date}}'
-            },
-            yAxis: {
-                title: {
-                    text: 'Expenses/Revenue'
-                }
-            },
-            xAxis: {
-                title: {
-                    text: 'Operation date'
-            },
-            type: 'datetime',
-                tickInterval: 24 * 3600 * 1000 * 7, {#    days * seconds in hour * miliseconds * week#}
-            },
-            series: [{
-                name: 'Amount by dates',
-                data: [
-                    {% for transaction in transactions_list %}
-                        [Date.parse('{{ transaction.date_operation }}'), {{ transaction.sum }}],
-                    {% endfor %}
-                ]
-            }],
-            responsive: {
-                rules: [{
-                    condition: {
-                        maxWidth: 500
-                    },
-                    chartOptions: {
-                        legend: {
-                            layout: 'horizontal',
-                            align: 'center',
-                            verticalAlign: 'bottom'
-                        }
-                    }
-                }]
-            }
-        });
-    </script>
+<script src="https://code.highcharts.com/highcharts.src.js"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
+<script>
+    Highcharts.chart('container', {
+      chart: {
+        type: 'spline'
+      },
+      title: {
+        text: 'Snow {{operation}} for the period {{start_date}}-{{end_date}}'
+      },
+      xAxis: {
+        type: 'datetime',
+        dateTimeLabelFormats: { // don't display the dummy year
+            day:'%e %B %Y'
+        },
+        title: {
+          text: 'Date'
+        }
+      },
+      yAxis: {
+        title: {
+          text: 'Snow {{operation}}'
+        },
+        min: 0
+      },
+      tooltip: {
+        headerFormat: '<b>{series.name}</b><br>',
+        pointFormat: '{point.x:%A, %b %e, %Y}: {point.y:.2f}'
+      },
+
+      plotOptions: {
+        spline: {
+          marker: {
+            enabled: true
+          }
+        }
+      },
+
+      colors: ['#6CF', '#39F', '#06C', '#036', '#000'],
+      series: [{
+          name: "Category ",
+          data: [
+            {%for transaction in transactions_list %}
+            [Date.parse('{{transaction.date_operation}}'), {{ transaction.transaction_total }}],
+            {% endfor %}
+        ]
+      }]
+    });
+</script>
 {% endblock %}

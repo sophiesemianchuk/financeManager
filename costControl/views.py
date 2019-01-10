@@ -6,6 +6,7 @@ from django.template.context_processors import csrf
 from django.contrib.auth.decorators import login_required
 from django.db.models.deletion import ProtectedError
 from django.db.models import Count, Sum
+from datetime import datetime
 from .models import Category, Transaction, SELECT_OPERATION
 from .forms import CategoryForm, TransactionForm, SignUpForm
 
@@ -240,11 +241,13 @@ def day_by_day(request):
     operation = request.POST.get('operation')
     start_date = request.POST.get('start_date')
     end_date = request.POST.get('end_date')
-    transactions_list = Transaction.objects.filter(user=request.user).filter(operation=operation).filter(date_operation__range=[start_date, end_date]).order_by('date_operation')
+    category_id = request.POST.get('category')
+    transactions_list = Transaction.objects.filter(user=request.user).filter(operation=operation).filter(category=category_id).filter(date_operation__range=[start_date, end_date]).order_by('date_operation').values('date_operation').annotate(transaction_total=Sum('sum'))
     context = {
         'transactions_list': transactions_list,
         'start_date': start_date,
         'end_date': end_date,
+        'operation': operation,
     }
     return render(request, 'day_by_day.html', context)
 
@@ -257,8 +260,10 @@ def report_generator(request):
         elif '_day_by_day' in request.POST:
             return day_by_day(request)
     else:
+        categories_list = Category.objects.all()
         context = {
             'SELECT_OPERATION': SELECT_OPERATION,
+            'categories_list': categories_list,
         }
         return render(request, 'report_generator.html', context)
 
