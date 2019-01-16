@@ -242,9 +242,15 @@ def day_by_day(request):
     start_date = request.POST.get('start_date')
     end_date = request.POST.get('end_date')
     category_id = request.POST.get('category')
-    transactions_list = Transaction.objects.filter(user=request.user).filter(operation=operation).filter(category=category_id).filter(date_operation__range=[start_date, end_date]).order_by('date_operation').values('date_operation').annotate(transaction_total=Sum('sum'))
+    if category_id != 'False':
+        transactions_list = Transaction.objects.filter(user=request.user, operation=operation, category=category_id, date_operation__range=[start_date, end_date]).order_by('date_operation').values('category__category', 'date_operation').annotate(transaction_total=Sum('sum'))
+        categories_list = Category.objects.filter(id = category_id)
+    else:
+        transactions_list = Transaction.objects.filter(user=request.user, operation=operation, date_operation__range=[start_date, end_date]).order_by('date_operation').values('category__category','date_operation').annotate(transaction_total=Sum('sum'))
+        categories_list = Category.objects.all()
     context = {
         'transactions_list': transactions_list,
+        'categories_list': categories_list,
         'start_date': start_date,
         'end_date': end_date,
         'operation': operation,

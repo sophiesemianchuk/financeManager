@@ -25,7 +25,7 @@
         <div class="form-group">
             <label for="operation">Enter a category (from day_by_day):</label>
             <select class="custom-select form-control" name="category" id="category">
-                <option selected>Choose...</option>
+                <option value="False" selected>Choose...</option>
                 {% for category in categories_list %}
                 <option value="{{category.id}}">{{category.category}}</option>
                 {% endfor %}

@@ -9,7 +9,17 @@
             {% for transaction in transactions_list %}
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 {{ transaction.date_operation }}
+                {{ transaction.category__category }}
                 <span>{{ transaction.transaction_total }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="container-fluid col-3" style="margin-top:2em">
+        <ul class="list-group">
+            {% for category in categories_list %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ category.category }}
             </li>
             {% endfor %}
         </ul>
@@ -29,7 +39,7 @@
       xAxis: {
         type: 'datetime',
         dateTimeLabelFormats: { // don't display the dummy year
-            day:'%e %B %Y'
+            day:'%e-%B-%Y'
         },
         title: {
           text: 'Date'
@@ -54,15 +64,18 @@
         }
       },
 
-      colors: ['#6CF', '#39F', '#06C', '#036', '#000'],
-      series: [{
-          name: "Category ",
+      colors: ['#db2a2a', '#167536', '#0a62ba', '#b0e31e', '#000'],
+      series: [{%for category in categories_list %}{
+          name: '{{category.category}}',
           data: [
-            {%for transaction in transactions_list %}
-            [Date.parse('{{transaction.date_operation}}'), {{ transaction.transaction_total }}],
-            {% endfor %}
-        ]
-      }]
+          {%for transaction in transactions_list %}
+          {%if transaction.category__category == category.category %}
+          [Date.parse('{{transaction.date_operation}}'), {{ transaction.transaction_total }}],
+          {% endif %}
+          {% endfor %}
+          ]
+      },{%endfor%}
+      ]
     });
 </script>
 {% endblock %}
